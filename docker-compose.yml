@@ -12,6 +12,7 @@ services:
       - .env
     environment:
       - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
     volumes:
       - ./config/qbittorrent:/config
       - ${ARRPATH}/torrents:/data/torrents
@@ -119,18 +120,19 @@ services:
   # Cleanup & Quality Enforcement
   # ----------------------------
   maintainerr:
-    image: ghcr.io/maintainerr/maintainerr:latest # or jorenn92/maintainerr:latest
+    image: ghcr.io/jorenn92/maintainerr:latest # or jorenn92/maintainerr:latest
     container_name: maintainerr
     env_file:
       - .env
-    volumes:
-      - ./config/maintainerr:/app/config
-      - ${ARRPATH}/media:/media
-      - ${ARRPATH}/torrents:/torrents
+    volumes:      
+      - ${ARRPATH}:/opt/data      
     ports:
       - 6246:6246
     restart: unless-stopped
 
+  # ----------------------------
+  # Format Standardization
+  # ----------------------------
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:latest
     container_name: recyclarr
