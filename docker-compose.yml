@@ -1,0 +1,161 @@
+version: "3.8"
+
+services:
+
+  # ----------------------------
+  # Download client
+  # ----------------------------
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    env_file:
+      - .env
+    environment:
+      - WEBUI_PORT=8080
+    volumes:
+      - ./config/qbittorrent:/config
+      - ${ARRPATH}/torrents:/data/torrents
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+  # ----------------------------
+  # Indexer manager
+  # ----------------------------
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    env_file:
+      - .env
+    volumes:
+      - ./config/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  # ----------------------------
+  # Movies
+  # ----------------------------
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    env_file:
+      - .env
+    volumes:
+      - ./config/radarr:/config
+      - ${ARRPATH}/torrents/movies:/data/torrents/movies
+      - ${ARRPATH}/media/movies:/movies
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  # ----------------------------
+  # TV Shows
+  # ----------------------------
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    env_file:
+      - .env
+    volumes:
+      - ./config/sonarr:/config
+      - ${ARRPATH}/torrents/tv:/data/torrents/tv
+      - ${ARRPATH}/media/tv:/tv
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  # ----------------------------
+  # Subtitles
+  # ----------------------------
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    env_file:
+      - .env
+    volumes:
+      - ./config/bazarr:/config
+      - ${ARRPATH}/media:/media
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  # ----------------------------
+  # Media server
+  # ----------------------------
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    env_file:
+      - .env
+    volumes:
+      - ./config/jellyfin:/config
+      - ${ARRPATH}/media:/media
+    ports:
+      - 8096:8096
+      - 8920:8920
+    restart: unless-stopped
+
+  # ----------------------------
+  # Dashboard
+  # ----------------------------
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:latest
+    container_name: homarr
+    env_file:
+      - .env
+    volumes:      
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - ./config/homarr/appdata:/appdata
+    environment:
+      - SECRET_ENCRYPTION_KEY=32047abcf8cbe8f070e5becc89e63e0dc3914c009b9cd055ee69bcf22e3a6184
+    ports:
+      - 7575:7575
+    restart: unless-stopped
+
+  # ----------------------------
+  # Cleanup & Quality Enforcement
+  # ----------------------------
+  maintainerr:
+    image: ghcr.io/maintainerr/maintainerr:latest # or jorenn92/maintainerr:latest
+    container_name: maintainerr
+    env_file:
+      - .env
+    volumes:
+      - ./config/maintainerr:/app/config
+      - ${ARRPATH}/media:/media
+      - ${ARRPATH}/torrents:/torrents
+    ports:
+      - 6246:6246
+    restart: unless-stopped
+
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    container_name: recyclarr
+    env_file:
+      - .env
+    volumes:
+      - ./config/recyclarr:/config
+    restart: unless-stopped
+
+  # ----------------------------
+  # Requests tracking
+  # ----------------------------
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    env_file:
+      - .env
+    volumes:
+      - ./config/jellyseerr:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+# ----------------------------
+# Optional: Networks (default works)
+# ----------------------------
+# All services will use the default Docker Compose network,
+# allowing service DNS names like 'radarr', 'sonarr', 'qbittorrent' internally

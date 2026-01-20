@@ -1,0 +1,83 @@
+# ============================
+# RADARR (Movies)
+# ============================
+radarr:
+  movies:
+    base_url: http://radarr:7878
+    api_key: YOUR_RADARR_API_KEY
+
+    quality_definition:
+      type: movie
+
+    quality_profiles:
+      - name: TRaSH-HD
+        upgrade:
+          allowed: true
+        qualities:
+          - name: Bluray-1080p
+          - name: WEB 1080p
+          - name: HDTV-1080p
+
+    custom_formats:
+      - trash_ids:
+          - ed38b889b31be83fda192888e2286d83 # x265
+          - 90a6f9c1e1d6eeb2b93d09d6edbd6a4c # WEB-DL
+          - 4d74ac4c4db0b64bff6ce0c45e4c2c27 # HEVC
+        assign_scores_to:
+          - name: TRaSH-HD
+
+
+# ============================
+# SONARR (TV - Standard)
+# ============================
+sonarr:
+  series:
+    base_url: http://sonarr:8989
+    api_key: YOUR_SONARR_API_KEY
+
+    quality_definition:
+      type: series
+
+    quality_profiles:
+      - name: TRaSH-HD
+        upgrade:
+          allowed: true
+        qualities:
+          - name: WEB 1080p
+          - name: Bluray-1080p
+          - name: HDTV-1080p
+
+    custom_formats:
+      - trash_ids:
+          - 32b367365729d530ca1c124a0b180c64 # x265
+          - 47435ece6b99a0b477caf360e79ba0bb # WEB-DL
+          - 82d40da2bc6923f41e14394075dd4b03 # HEVC
+        assign_scores_to:
+          - name: TRaSH-HD
+
+
+# ============================
+# SONARR (ANIME - 720p)
+# ============================
+  anime:
+    base_url: http://sonarr:8989
+    api_key: YOUR_SONARR_API_KEY
+
+    quality_definition:
+      type: anime
+
+    quality_profiles:
+      - name: TRaSH-Anime-720p
+        upgrade:
+          allowed: true
+        qualities:
+          - name: WEB 720p
+          - name: HDTV-720p
+
+    custom_formats:
+      - trash_ids:
+          - a5d148168c4506b55cf53984107c396e # Anime Dual Audio
+          - 418f50b10f1907201b6cfdf881f467b7 # Anime Sub
+          - 9c14d194486c4014d422adc64092d794 # Anime BD Remux
+        assign_scores_to:
+          - name: TRaSH-Anime-720p
