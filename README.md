@@ -4,13 +4,13 @@ This repository contains all scripts, configurations, and Docker Compose files t
 
 - Radarr (Movies)
 - Sonarr (TV Shows)
-- Readarr (Books)
 - Prowlarr (Indexers)
 - Jellyfin (Media Server)
 - Jellyseerr (Requests)
 - Homarr (Dashboard)
 - Bazarr (Subtitles)
 - Maintainerr (Cleanup / Quality Enforcement)
+- Recyclarr (Standardize formats)
 - qBittorrent (Torrent client)
 
 ---
@@ -42,22 +42,7 @@ chmod +x scripts/<script_name>.sh
 - Adds user `media` to the `docker` group so you can run Docker commands **without `sudo`**.
 - Starts Docker service on boot.
 
-### 3. `install-xfce-kiosk.sh`
-
-- Installs XFCE desktop environment and LightDM display manager.
-- Installs Firefox for the kiosk dashboard.
-- Installs `avahi-daemon` for mDNS hostname resolution.
-- Enables graphical boot target.
-
-### 4. `setup-kiosk.sh`
-
-- Enables **auto-login** for user `media`.
-- Sets up **Firefox kiosk mode** to open Homarr at `http://mediaserver:7575`.
-- Creates a desktop icon to relaunch Homarr if needed.
-
----
-
-## 🐳 Running the Docker Stack
+### 3. `Running the Docker Stack`
 
 Once folders are created and Docker is installed, run:
 
@@ -68,6 +53,18 @@ docker compose up -d
 - This will start all services in detached mode.
 - The first startup may take a few minutes while containers initialize.
 
+### 4. `install-xfce-kiosk.sh`
+
+- Installs XFCE desktop environment and LightDM display manager.
+- Installs Firefox for the kiosk dashboard.
+- Installs `avahi-daemon` for mDNS hostname resolution.
+- Enables graphical boot target.
+
+### 5. `setup-kiosk.sh`
+
+- Enables **auto-login** for user `media`.
+- Sets up **Firefox kiosk mode** to open Homarr at `http://mediaserver:7575`.
+- Creates a desktop icon to relaunch Homarr if needed.
 ---
 
 ### ✅ First-Boot ARR Checklist (based on TRaSH-Guides)
@@ -75,7 +72,7 @@ docker compose up -d
 ### 🔹 Step 1 – Set authentication (optional but smart)
 
 - Set a password for:
-    - qBittorrent (
+    - qBittorrent (get the temp password with cmd `docker log qbittorrent`
     - Radarr
     - Sonarr
     - Readarr
@@ -277,4 +274,5 @@ After the stack is running, log in to the web UIs of each application and link t
 - Ensure your `.env` is properly set with `ARRPATH`, `PUID`, `PGID`, `TZ`.
 - Permissions: Docker containers use `PUID` / `PGID` to access media/torrent folders.
 - Desktop / kiosk: Firefox auto-launches Homarr. Use the desktop icon to reopen if needed.
+
 - Logs: Config folders contain logs and DB files. Consider backups for persistence.
