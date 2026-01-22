@@ -15,10 +15,8 @@ echo "Using data path: $ARRPATH"
 # Create directories
 mkdir -p "$ARRPATH"/{torrents,media}/{movies,tv,books}
 
-# Config directories
-mkdir -p config/{radarr,sonarr,readarr,prowlarr,qbittorrent,bazarr,jellyfin,jellyseerr,homarr,recyclarr,maintainerr}
-
 # Ownership
-chown -R "${PUID:-1000}:${PGID:-1000}" "$ARRPATH" config
+# chown -R "${PUID:-1000}:${PGID:-1000}" "$ARRPATH" config
+chown -R $PUID:$PGID "$ARRPATH"
 
 echo "Folder structure created and permissions applied"
