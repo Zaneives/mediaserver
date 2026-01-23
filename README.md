@@ -28,7 +28,7 @@ This repository contains all scripts, configurations, and Docker Compose files t
 All scripts are located in the `scripts/` folder. Before running, make them executable:
 
 ```bash
-chmod +x scripts/<script_name>.sh
+chmod +x scripts/*
 ```
 
 ### 1. `create-arr-folders.sh`
@@ -41,6 +41,7 @@ chmod +x scripts/<script_name>.sh
 - Installs Docker Engine, CLI, and Docker Compose plugin.
 - Adds user `media` to the `docker` group so you can run Docker commands **without `sudo`**.
 - Starts Docker service on boot.
+- `logout` and log back in.
 
 ### 3. `Running the Docker Stack`
 
@@ -52,6 +53,7 @@ docker compose up -d
 
 - This will start all services in detached mode.
 - The first startup may take a few minutes while containers initialize.
+
 
 ### 4. `install-xfce-kiosk.sh`
 
