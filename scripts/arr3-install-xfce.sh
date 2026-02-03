@@ -22,6 +22,12 @@ apt install -y xfce4 xfce4-goodies
 echo "Installing LightDM..."
 apt install -y lightdm
 
+echo "Installing LightDM GTK greeter (required for XFCE on Ubuntu Server)..."
+sudo apt install -y lightdm-gtk-greeter
+
+echo "Configuring LightDM as default display manager..."
+sudo dpkg-reconfigure lightdm
+
 # Install Firefox for kiosk dashboard
 echo "Installing Firefox..."
 apt install -y firefox
