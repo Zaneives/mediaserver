@@ -17,7 +17,7 @@ This repository contains all scripts, configurations, and Docker Compose files t
 
 ## 🖥️ System & User Configuration
 
-- **Recommended OS:** Ubuntu Server (minimal installation)
+- **Recommended OS:** Linux Mint XFCE Edition
 - **Username:** `media` (used for auto-login and Docker permissions)
 - **Hostname:** `mediaserver` (used for mDNS / internal URLs)
 
@@ -28,24 +28,22 @@ This repository contains all scripts, configurations, and Docker Compose files t
 All scripts are located in the `scripts/` folder. Before running, make them executable:
 
 ```bash
-chmod +x scripts/*
+sudo chmod +x scripts/*
 ```
 
-### 1. `create-arr-folders.sh`
+### 1. `arr1-folders-and-docker.sh`
 
-- Creates the folder structure for torrents, media, and configs.
+- Creates the folder structure for torrents and media
 - Ensures directories have proper permissions based on your `.env` (`PUID` / `PGID`).
-
-### 2. `install-docker.sh`
-
 - Installs Docker Engine, CLI, and Docker Compose plugin.
 - Adds user `media` to the `docker` group so you can run Docker commands **without `sudo`**.
 - Starts Docker service on boot.
-- `logout` and log back in.
+- You will need to `logout` or `reboot` after
 
-### 3. `Running the Docker Stack`
 
-Once folders are created and Docker is installed, run:
+### 2. `docker compose up -d`
+
+Once folders are created and Docker is installed, go to the folder containing the compose file and run:
 
 ```bash
 docker compose up -d
@@ -54,22 +52,12 @@ docker compose up -d
 - This will start all services in detached mode.
 - The first startup may take a few minutes while containers initialize.
 
+### 3. `arr2-xfce-firefox-kiosk.sh` or `arr2-xfce-chromium-kiosk.sh`
 
-### 4. `install-xfce-kiosk.sh`
+- Choose either browser to run in kiosk mode. Not both
 
-- Installs XFCE desktop environment and LightDM display manager.
-- Installs Firefox for the kiosk dashboard.
-- Installs `avahi-daemon` for mDNS hostname resolution.
-- Enables graphical boot target.
 
-### 5. `setup-kiosk.sh`
-
-- Enables **auto-login** for user `media`.
-- Sets up **Firefox kiosk mode** to open Homarr at `http://mediaserver:7575`.
-- Creates a desktop icon to relaunch Homarr if needed.
----
-
-### ✅ First-Boot ARR Checklist (based on TRaSH-Guides)
+## ✅ First-Boot ARR Checklist (based on TRaSH-Guides)
 
 ### 🔹 Step 1 – Set authentication (optional but smart)
 
