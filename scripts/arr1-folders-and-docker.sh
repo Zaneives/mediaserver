@@ -17,13 +17,13 @@ else
   exit 1
 fi
 
+USERNAME="media"
 # Ask for the username to add to docker group
-read -rp "Enter the username to allow docker without sudo: " USERNAME
-
-if ! id "$USERNAME" &>/dev/null; then
-  echo "❌ User '$USERNAME' does not exist."
-  exit 1
-fi
+#read -rp "Enter the username to allow docker without sudo: " USERNAME
+#if ! id "$USERNAME" &>/dev/null; then
+#  echo "❌ User '$USERNAME' does not exist."
+#  exit 1
+#fi
 
 echo "Using data path: $ARRPATH"
 
@@ -41,36 +41,43 @@ echo "Folder structure created and permissions applied"
 
 echo "=== Installing Docker and Docker Compose ==="
 
+. /etc/os-release
+
+if [[ "$ID" == "linuxmint" ]]; then
+  UBUNTU_CODENAME="$UBUNTU_CODENAME"
+elif [[ "$ID" == "ubuntu" ]]; then
+  UBUNTU_CODENAME="$VERSION_CODENAME"
+else
+  echo "Unsupported distro"
+  exit 1
+fi
+
+echo "Using Ubuntu base: $UBUNTU_CODENAME"
+
 # Update packages
 echo "Updating package lists..."
 apt update -y
-apt install -y \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release \
-    software-properties-common
 
+# Prereqs
+sudo apt install -y ca-certificates curl gnupg
 
-# Add Docker’s official GPG key
+# Add Docker GPG key
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
   sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-# Linux Mint fix: force Ubuntu jammy
+# Force Ubuntu (pulled Ubuntu codename from os-release file)
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu jammy stable" | \
+  https://download.docker.com/linux/ubuntu $UBUNTU_CODENAME stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt update
 
-
 # Install Docker Engine & CLI
 echo "Installing Docker Engine & CLI..."
-apt update -y
-apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Add user to docker group
 echo "Adding $USERNAME to docker group..."

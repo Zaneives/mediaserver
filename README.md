@@ -33,6 +33,11 @@ sudo chmod +x scripts/*
 
 ### 1. `arr1-folders-and-docker.sh`
 
+#### Linux Mint 22.x note
+Docker repositories are added using the underlying Ubuntu base
+(noble for Mint 22.x), not the Mint codename.
+This is intentional and required.
+
 - Creates the folder structure for torrents and media
 - Ensures directories have proper permissions based on your `.env` (`PUID` / `PGID`).
 - Installs Docker Engine, CLI, and Docker Compose plugin.
