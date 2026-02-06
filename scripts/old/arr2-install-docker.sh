@@ -2,6 +2,8 @@
 
 set -e
 
+# Installing Docker and Docker Compose
+
 echo "=== Installing Docker and Docker Compose ==="
 
 # Ensure script is run as root
